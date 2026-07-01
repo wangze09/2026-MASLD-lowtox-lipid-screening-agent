@@ -34,22 +34,18 @@ Step 5: LLM multi-criteria scoring & nomination → Top-10 candidates
 ```
 .
 ├── targetmol_similarity_search.py       # Step 2: ECFP4 similarity search
-├── S2DV-main/S2DV-main/
-│   ├── predict_hepg2_s2dv.py            # Step 3a: S2DV cytotoxicity prediction wrapper
-│   ├── S2DV_main.py                     # Core S2DV model code
-│   └── model/                           # Pre-trained S2DV model files
+├── predict_hepg2_s2dv.py            # Step 3a: S2DV cytotoxicity prediction wrapper
 ├── antibioticsai/                       # Step 3b: chemprop Nature model
-│   └── final_checkpoints/cytotox_hepg2/ # Pre-trained chemprop checkpoints
-│
-├── GPT_总结的降脂低毒种子化合物表格_wz_jw校验.xlsx   # Curated seed compounds (SMILES + evidence)
+│   └── final_checkpoints/cytotox_hepg2/ # Pre-trained chemprop checkpoints(Reproduce following to the original Github)
+├── GPT_总结的降脂低毒种子化合物表格_wz_jw校验.xlsx   # Curated seed compounds (SMILES + evidence)    (To be uploaded)
 ├── HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx  # Similarity search output
 ├── s2dv_hepg2_pred_candidates.csv       # S2DV prediction results
 ├── candidate_targetmol_pred_nature_HepG2.csv  # Nature chemprop prediction results
-├── final_candidates_info.csv            # Merged candidate table for LLM ranking
+├── final_candidates_info.csv            # Merged candidate table for LLM ranking     (To be uploaded)
 │
-├── 候选分子提名清单_Top10.csv            # Final Top-10 nomination list
-├── 机制验证方案_Top10.csv               # Mechanistic hypotheses & validation plans
-└── 机制与验证方案_Top10.pdf             # Submission-ready PDF report
+├── 候选分子提名清单_Top10.csv            # Final Top-10 nomination list    (To be uploaded)
+├── 机制验证方案_Top10.csv               # Mechanistic hypotheses & validation plans (To be uploaded)
+└── 机制与验证方案_Top10.pdf             # Submission-ready PDF report  (To be uploaded)
 ```
 
 ---
