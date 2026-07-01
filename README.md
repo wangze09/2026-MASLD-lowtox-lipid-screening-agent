@@ -1,5 +1,3 @@
-# 2026_XXX-
-比赛相关代码、文件以及说明
 [README.md](https://github.com/user-attachments/files/29531435/README.md)
 # AI-Assisted Lipid-Lowering & Low-Toxicity Compound Screening
 
