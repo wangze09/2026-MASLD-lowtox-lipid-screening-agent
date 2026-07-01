@@ -103,7 +103,6 @@ python targetmol_similarity_search.py \
 ### Step 3a — S2DV HepG2 Cytotoxicity Prediction
 
 ```bash
-cd S2DV-main/S2DV-main
 python predict_hepg2_s2dv.py \
   --input_csv ../../HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx \
   --output_csv ../../s2dv_hepg2_pred_candidates.csv \
