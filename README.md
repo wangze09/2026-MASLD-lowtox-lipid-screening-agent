@@ -187,7 +187,7 @@ The strategy was **5 confident hits (similarity ≥ 0.9) + 5 novel exploratory c
 | Model | Repository | Reference |
 |-------|------------|-------|
 | S2DV (HepG2 cytotoxicity) | [NTU-MedAI/S2DV](https://github.com/NTU-MedAI/S2DV) | Shao et al., *Briefings in Bioinformatics*, 2022 |
-| Chemprop cytotoxicity | [felixjwong/antibioticsai](https://github.com/felixjwong/antibioticsai) | Wong et al., *Nature* |
+| Chemprop cytotoxicity | [felixjwong/antibioticsai](https://github.com/felixjwong/antibioticsai) | Wong et al., *Nature*, 2024 |
 | Compound library | TargetMol T001 (~22,966 compounds) | — |
 
 ---
