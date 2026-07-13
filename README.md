@@ -148,7 +148,7 @@ The two prediction outputs were merged with similarity search results and Target
 | `similarity` | ECFP4 Tanimoto similarity to seed |
 | `hepg2_toxic_proba_S2DV` | HepG2 toxicity probability (S2DV model) |
 | `hepg2_toxic_proba_nature` | HepG2 toxicity probability (Nature chemprop model) |
-| `Name`, `Pathways`, `Target`, `Bioactivity` | Vendor-provided annotations |
+| `Name`, `Pathways`, `Target`, `Bioactivity` | Agent-curated annotations for candidate compounds |
 
 ---
 
