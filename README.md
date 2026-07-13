@@ -12,13 +12,12 @@ This repository provides a reproducible AI-assisted screening workflow for the M
 
 The final nomination strategy prioritizes compounds that balance lipid-lowering potential, predicted low hepatocytotoxicity, mechanistic plausibility, and structural novelty. The submitted Top-10 list contains both high-confidence candidates with strong seed-compound support and exploratory candidates with lower structural similarity but plausible lipid-metabolism mechanisms.
 
-
 ---
 
 ## Workflow Summary
 
 ```
-Step 1: GPT-assisted seed compound curation (literature mining)
+Step 1: LLM-assisted seed compound curation (literature mining)
            ↓
 Step 2: ECFP4-based similarity search against TargetMol library (Tanimoto ≥ 0.75, Top-5)
            ↓
