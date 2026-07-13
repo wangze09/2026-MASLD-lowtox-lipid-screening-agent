@@ -8,7 +8,10 @@
 
 ## Overview
 
-This repository documents a multi-step AI-assisted virtual screening workflow designed to identify novel, low-toxic lipid-lowering compounds for the HepG2 free-fatty-acid (FFA) intracellular lipid accumulation model. The pipeline integrates literature-based seed curation, molecular fingerprint similarity search, dual-model cytotoxicity prediction, and LLM-assisted multi-criteria ranking.
+This repository provides a reproducible AI-assisted screening workflow for the MASLD low-toxicity lipid-lowering compound discovery task. The workflow is organized as a modular screening agent rather than a single predictive model. It integrates literature-based seed compound curation, ECFP4/Tanimoto similarity expansion against the TargetMol compound library, dual HepG2 cytotoxicity prediction, manual evidence integration, and LLM-assisted multi-criteria ranking.
+
+The final nomination strategy prioritizes compounds that balance lipid-lowering potential, predicted low hepatocytotoxicity, mechanistic plausibility, and structural novelty. The submitted Top-10 list contains both high-confidence candidates with strong seed-compound support and exploratory candidates with lower structural similarity but plausible lipid-metabolism mechanisms.
+
 
 ---
 
