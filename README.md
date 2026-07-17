@@ -1,52 +1,54 @@
 # AI-Assisted Lipid-Lowering & Low-Toxicity Compound Screening
 
-> **Competition:** AI for Science Competition — Life Science Track  
+> **Competition:** AI for Science Competition - Life Science Track  
 > **Task:** Nominate candidate molecules with lipid-lowering activity and low hepatocytotoxicity from a commercial library (TargetMol ~23k compounds) in the HepG2-FFA model
 
 ---
 
 ## Overview
 
-This repository provides a reproducible AI-assisted screening workflow for the MASLD low-toxicity lipid-lowering compound discovery task. The workflow is organized as a modular screening agent rather than a single predictive model. It integrates literature-based seed compound curation, ECFP4/Tanimoto similarity expansion against the TargetMol compound library, dual HepG2 cytotoxicity prediction, manual evidence integration, and LLM-assisted multi-criteria ranking.
+This repository provides a reproducible AI-assisted screening workflow for the MASLD low-toxicity lipid-lowering compound discovery task.
 
-The final nomination strategy prioritizes compounds that balance lipid-lowering potential, predicted low hepatocytotoxicity, mechanistic plausibility, and structural novelty. The submitted Top-10 list contains both high-confidence candidates with strong seed-compound support and exploratory candidates with lower structural similarity but plausible lipid-metabolism mechanisms.
+The workflow is organized as a modular screening agent rather than a single predictive model. It integrates literature-based seed compound curation, ECFP4/Tanimoto similarity expansion against the TargetMol compound library, dual HepG2 cytotoxicity prediction, manual evidence integration, and LLM-assisted multi-criteria ranking. The final nomination strategy prioritizes compounds that balance lipid-lowering potential, predicted low hepatocytotoxicity, mechanistic plausibility, and structural novelty.
+
+The submitted Top-10 list contains both high-confidence candidates with strong seed-compound support and exploratory candidates with lower structural similarity but plausible lipid-metabolism mechanisms.
 
 ---
 
 ## Workflow Summary
 
-```
+```text
 Step 1: LLM-assisted seed compound curation (literature mining)
-           ↓
-Step 2: ECFP4-based similarity search against TargetMol library (Tanimoto ≥ 0.75, Top-5)
-           ↓
-Step 3a: S2DV model — HepG2 cytotoxicity prediction (local)
-Step 3b: Nature/chemprop model — HepG2 cytotoxicity prediction (server)
-           ↓
-Step 4: Manual integration → final_candidates_info.csv
-           ↓
-Step 5: LLM multi-criteria scoring & nomination → Top-10 candidates
+        -> Step 2: ECFP4-based similarity search against TargetMol library (Tanimoto >= 0.75, Top-5)
+        -> Step 3a: S2DV model - HepG2 cytotoxicity prediction (local)
+Step 3b: Nature/chemprop model - HepG2 cytotoxicity prediction (server)
+        -> Step 4: Manual integration -> final_candidates_info.csv
+        -> Step 5: LLM multi-criteria scoring & nomination -> Top-10 candidates
 ```
 
 ---
 
 ## Repository Structure
 
-```
+```text
 .
-├── targetmol_similarity_search.py       # Step 2: ECFP4 similarity search
-├── predict_hepg2_s2dv.py            # Step 3a: S2DV cytotoxicity prediction wrapper
-├── External dependency: felixjwong/antibioticsai                      # Step 3b: chemprop Nature model
-│   └── final_checkpoints/cytotox_hepg2/ # Pre-trained chemprop checkpoints(Reproduce following to the original Github)
-├── Agent总结的降脂低毒种子化合物表格_校验版.xlsx   # Curated seed compounds (SMILES + evidence)
-├── HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx  # Similarity search output
-├── s2dv_hepg2_pred_candidates.csv       # S2DV prediction results
-├── candidate_targetmol_pred_nature_HepG2.csv  # Nature chemprop prediction results
-├── final_candidates_info.csv            # Merged candidate table for LLM ranking
-│
-├── 候选分子提名清单_Top10.csv            # Final Top-10 nomination list    (Upload in official channel)
-├── 机制验证方案_Top10.csv               # Mechanistic hypotheses & validation plans (Upload in official channel)
-└── 机制与验证方案_Top10.pdf             # Submission-ready PDF report  (Upload in official channel)
+|-- targetmol_similarity_search.py       # Step 2: ECFP4 similarity search
+|-- competition_library_structures.csv   # Structure library for Step 2 (ID/CAS/SMILES/Formula/MolWt)
+|-- competition_library_annotations.csv  # Auxiliary compound annotations used during manual evidence integration
+|-- S2DV-main/S2DV-main/
+|   |-- predict_hepg2_s2dv.py            # Step 3a: S2DV cytotoxicity prediction wrapper
+|   |-- S2DV_main.py                     # Core S2DV model code
+|   `-- model/                           # Pre-trained S2DV model files
+|-- antibioticsai/                       # Step 3b: chemprop Nature model
+|   `-- final_checkpoints/cytotox_hepg2/ # Pre-trained chemprop checkpoints
+|-- Agent总结的降脂低毒种子化合物表格_校验版.xlsx   # Curated seed compounds (SMILES + evidence)
+|-- HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx  # Similarity search output
+|-- s2dv_hepg2_pred_candidates.csv       # S2DV prediction results
+|-- candidate_targetmol_pred_nature_HepG2.csv  # Nature chemprop prediction results
+|-- final_candidates_info.csv            # Merged candidate table for LLM ranking
+|-- 候选分子提名清单_Top10.csv             # Final Top-10 nomination list (upload in official channel)
+|-- 机制验证方案_Top10.csv                # Mechanistic hypotheses & validation plans (upload in official channel)
+`-- 机制与验证方案_Top10.pdf              # Submission-ready PDF report (upload in official channel)
 ```
 
 ---
@@ -65,23 +67,25 @@ For the Nature/chemprop model (Step 3b), a separate server environment is requir
 
 ---
 
-### Step 1 — Seed Compound Curation
+### Step 1 - Seed Compound Curation
 
 Seed compounds were identified by prompting GPT with:
 
 > "Search the literature for candidate molecules that can reduce lipid accumulation in HepG2 cells under FFA-induced conditions, while not significantly impairing cell viability at effective concentrations. Provide SMILES or compound names."
 
-Results were manually reviewed and cross-validated. The final curated seed list with SMILES is in:
+Results were manually reviewed and cross-validated.
+
+The final curated seed list with SMILES is in:
 `Agent总结的降脂低毒种子化合物表格_校验版.xlsx`
 
 ---
 
-### Step 2 — Similarity Search
+### Step 2 - Similarity Search
 
 ```bash
 python targetmol_similarity_search.py \
   --seed_file "Agent总结的降脂低毒种子化合物表格_校验版.xlsx" \
-  --lib_file "T001 TargetMol现货产品22966.csv" \
+  --lib_file "competition_library_structures.csv" \
   --seed_smiles_col "SMILES" \
   --threshold 0.75 \
   --top_k 5 \
@@ -89,10 +93,12 @@ python targetmol_similarity_search.py \
 ```
 
 **Output:**
-- `HepG2_FFA_TargetMol_similarity_075_per_seed_top_hits.xlsx` — all hits per seed
-- `HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx` — deduplicated by max similarity
+
+- `HepG2_FFA_TargetMol_similarity_075_per_seed_top_hits.xlsx` - all hits per seed
+- `HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx` - deduplicated by max similarity
 
 **Parameters:**
+
 | Parameter | Value | Rationale |
 |-----------|-------|-----------|
 | Fingerprint | ECFP4 (Morgan r=2, 2048 bits) | Standard scaffold-similarity metric |
@@ -101,9 +107,10 @@ python targetmol_similarity_search.py \
 
 ---
 
-### Step 3a — S2DV HepG2 Cytotoxicity Prediction
+### Step 3a - S2DV HepG2 Cytotoxicity Prediction
 
 ```bash
+cd S2DV-main/S2DV-main
 python predict_hepg2_s2dv.py \
   --input_csv ../../HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx \
   --output_csv ../../s2dv_hepg2_pred_candidates.csv \
@@ -113,18 +120,9 @@ python predict_hepg2_s2dv.py \
 **Model source:** [NTU-MedAI/S2DV](https://github.com/NTU-MedAI/S2DV)  
 **Output column:** `hepg2_toxic_proba` (SVM classifier, probability of HepG2 toxicity)
 
-### S2DV pretrained model files
-
-The pretrained S2DV model files are not redistributed in this repository.
-Please obtain the following files from the official NTU-MedAI/S2DV repository
-and place them in the `model/` directory:
-
-- HepG2.ECFP.models.pkl
-- HepG2_token.pkl
-- HepG2_emb.pkl
 ---
 
-### Step 3b — Nature/chemprop HepG2 Cytotoxicity Prediction
+### Step 3b - Nature/chemprop HepG2 Cytotoxicity Prediction
 
 Run on server with chemprop environment:
 
@@ -142,9 +140,9 @@ chemprop_predict \
 
 ---
 
-### Step 4 — Manual Data Integration
+### Step 4 - Manual Data Integration
 
-The two prediction outputs were merged with similarity search results and TargetMol compound annotations to produce `final_candidates_info.csv`.
+The two prediction outputs were merged with similarity search results and agent-curated compound annotations to produce `final_candidates_info.csv`.
 
 **Key columns in `final_candidates_info.csv`:**
 
@@ -160,21 +158,22 @@ The two prediction outputs were merged with similarity search results and Target
 
 ---
 
-### Step 5 — LLM-Assisted Multi-Criteria Ranking
+### Step 5 - LLM-Assisted Multi-Criteria Ranking
 
 `final_candidates_info.csv` was submitted to an LLM with the following scoring criteria:
 
-- **Lipid-lowering potential** — seed evidence + structural features + pathway annotations
-- **Toxicity assessment** — mean of both predicted probabilities, threshold < 0.35 preferred
-- **Novelty** — Tanimoto similarity to seed (lower = more novel)
-- **Mechanistic plausibility** — SREBP1c/FASN/ACC (de novo lipogenesis), PPARα/AMPK/CPT1 (β-oxidation), autophagy
+- **Lipid-lowering potential** - seed evidence + structural features + pathway annotations
+- **Toxicity assessment** - mean of both predicted probabilities, threshold < 0.35 preferred
+- **Novelty** - Tanimoto similarity to seed (lower = more novel)
+- **Mechanistic plausibility** - SREBP1c/FASN/ACC (de novo lipogenesis), PPAR-alpha/AMPK/CPT1 (beta-oxidation), autophagy
 
-The strategy was **5 confident hits (similarity ≥ 0.9) + 5 novel exploratory candidates (similarity 0.75–0.85)**.
+The strategy was **5 confident hits (similarity >= 0.9) + 5 novel exploratory candidates (similarity 0.75-0.85)**.
 
 **Outputs:**
-- `候选分子提名清单_Top10.csv` — ranked Top-10 with scores and rationale
-- `机制验证方案_Top10.csv` — mechanistic hypotheses and validation plans
-- `机制与验证方案_Top10.pdf` — PDF submission
+
+- `候选分子提名清单_Top10.csv` - ranked Top-10 with scores and rationale
+- `机制验证方案_Top10.csv` - mechanistic hypotheses and validation plans
+- `机制与验证方案_Top10.pdf` - PDF submission
 
 ---
 
@@ -193,14 +192,15 @@ The strategy was **5 confident hits (similarity ≥ 0.9) + 5 novel exploratory c
 ## External Models & References
 
 | Model | Repository | Reference |
-|-------|------------|-------|
+|-------|------------|-----------|
 | S2DV (HepG2 cytotoxicity) | [NTU-MedAI/S2DV](https://github.com/NTU-MedAI/S2DV) | Shao et al., *Briefings in Bioinformatics*, 2022 |
 | Chemprop cytotoxicity | [felixjwong/antibioticsai](https://github.com/felixjwong/antibioticsai) | Wong et al., *Nature*, 2024 |
-| Compound library | TargetMol T001 (~22,966 compounds) | — |
+| Compound library | TargetMol T001 (~22,966 compounds) | - |
 
 ---
 
 ## License
 
 This repository is for competition submission and academic reference only.
+
 The pre-trained model weights in `S2DV-main/` and `antibioticsai/` are subject to their respective upstream licenses.
