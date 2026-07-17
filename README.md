@@ -145,7 +145,7 @@ chemprop_predict \
 
 ### Step 4 — Manual Data Integration
 
-The two prediction outputs were merged with similarity search results and TargetMol compound annotations to produce `final_candidates_info.csv`.
+The two prediction outputs were merged with similarity search results to produce `final_candidates_info.csv`. For candidate-level annotation, an agent was used to query the corresponding compounds on the TargetMol website by CAS number or SMILES, and to collect the matched compound name, pathway, target, and bioactivity information.
 
 **Key columns in `final_candidates_info.csv`:**
 
