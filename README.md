@@ -39,15 +39,15 @@ Step 5: LLM multi-criteria scoring & nomination → Top-10 candidates
 ├── predict_hepg2_s2dv.py            # Step 3a: S2DV cytotoxicity prediction wrapper
 ├── antibioticsai/                       # Step 3b: chemprop Nature model
 │   └── final_checkpoints/cytotox_hepg2/ # Pre-trained chemprop checkpoints(Reproduce following to the original Github)
-├── GPT_总结的降脂低毒种子化合物表格_wz_jw校验.xlsx   # Curated seed compounds (SMILES + evidence)    (To be uploaded)
+├── Agent总结的降脂低毒种子化合物表格_校验版.xlsx   # Curated seed compounds (SMILES + evidence)
 ├── HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx  # Similarity search output
 ├── s2dv_hepg2_pred_candidates.csv       # S2DV prediction results
 ├── candidate_targetmol_pred_nature_HepG2.csv  # Nature chemprop prediction results
-├── final_candidates_info.csv            # Merged candidate table for LLM ranking     (To be uploaded)
+├── final_candidates_info.csv            # Merged candidate table for LLM ranking
 │
-├── 候选分子提名清单_Top10.csv            # Final Top-10 nomination list    (To be uploaded)
-├── 机制验证方案_Top10.csv               # Mechanistic hypotheses & validation plans (To be uploaded)
-└── 机制与验证方案_Top10.pdf             # Submission-ready PDF report  (To be uploaded)
+├── 候选分子提名清单_Top10.csv            # Final Top-10 nomination list    (Upload in official channel)
+├── 机制验证方案_Top10.csv               # Mechanistic hypotheses & validation plans (Upload in official channel)
+└── 机制与验证方案_Top10.pdf             # Submission-ready PDF report  (Upload in official channel)
 ```
 
 ---
@@ -73,7 +73,7 @@ Seed compounds were identified by prompting GPT with:
 > "Search the literature for candidate molecules that can reduce lipid accumulation in HepG2 cells under FFA-induced conditions, while not significantly impairing cell viability at effective concentrations. Provide SMILES or compound names."
 
 Results were manually reviewed and cross-validated. The final curated seed list with SMILES is in:
-`GPT_总结的降脂低毒种子化合物表格_wz_jw校验.xlsx`
+`Agent总结的降脂低毒种子化合物表格_校验版.xlsx`
 
 ---
 
@@ -81,7 +81,7 @@ Results were manually reviewed and cross-validated. The final curated seed list 
 
 ```bash
 python targetmol_similarity_search.py \
-  --seed_file "GPT_总结的降脂低毒种子化合物表格_wz_jw校验.xlsx" \
+  --seed_file "Agent总结的降脂低毒种子化合物表格_校验版.xlsx" \
   --lib_file "T001 TargetMol现货产品22966.csv" \
   --seed_smiles_col "SMILES" \
   --threshold 0.75 \
