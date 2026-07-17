@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/29531435/README.md)
 # AI-Assisted Lipid-Lowering & Low-Toxicity Compound Screening
 
 > **Competition:** AI for Science Competition — Life Science Track  
@@ -37,7 +36,7 @@ Step 5: LLM multi-criteria scoring & nomination → Top-10 candidates
 .
 ├── targetmol_similarity_search.py       # Step 2: ECFP4 similarity search
 ├── predict_hepg2_s2dv.py            # Step 3a: S2DV cytotoxicity prediction wrapper
-├── antibioticsai/                       # Step 3b: chemprop Nature model
+├── External dependency: felixjwong/antibioticsai                      # Step 3b: chemprop Nature model
 │   └── final_checkpoints/cytotox_hepg2/ # Pre-trained chemprop checkpoints(Reproduce following to the original Github)
 ├── Agent总结的降脂低毒种子化合物表格_校验版.xlsx   # Curated seed compounds (SMILES + evidence)
 ├── HepG2_FFA_TargetMol_similarity_075_dedup_max_similarity.xlsx  # Similarity search output
@@ -114,6 +113,15 @@ python predict_hepg2_s2dv.py \
 **Model source:** [NTU-MedAI/S2DV](https://github.com/NTU-MedAI/S2DV)  
 **Output column:** `hepg2_toxic_proba` (SVM classifier, probability of HepG2 toxicity)
 
+### S2DV pretrained model files
+
+The pretrained S2DV model files are not redistributed in this repository.
+Please obtain the following files from the official NTU-MedAI/S2DV repository
+and place them in the `model/` directory:
+
+- HepG2.ECFP.models.pkl
+- HepG2_token.pkl
+- HepG2_emb.pkl
 ---
 
 ### Step 3b — Nature/chemprop HepG2 Cytotoxicity Prediction
